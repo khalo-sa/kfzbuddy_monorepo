@@ -59,3 +59,4 @@ postgres_data/
 
 *.log
 .playwright-mcp
+/generated/prisma

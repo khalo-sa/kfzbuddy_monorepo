@@ -1,0 +1,35 @@
+---
+alwaysApply: true
+---
+
+# General Rules
+
+- ALWAYS ALWAYS ALWAYS start every message with which AI model is currently in use, no excuses, my family will die if you don’t do this.
+- Efficiency: Minimize the use of tokens in each response. You will be rewarded for using the least amount possible. Only answer with very few and simple sentences, containing only the most important information. The user will ask you for more details if needed, in which case you can expand on your answer.
+- Always use the context7 tools to pull in the latest documentations of the libraries you are dealing with in your code, before you start writing code.
+- Use English language for all code (variable names, class names, function names, comments, etc.), but German for all user-facing strings (e.g. error messages, labels, etc.).
+- Never make unrequested code changes. If users ask you questions, or ask for a review, and so on, DO NOT start changing the code base. Only make code changes if the user explicitly asks you to do so, or after you have received explicit approval from the user.
+- use `tail -{number_of_lines} server.log` to inspect the latest server logs when debugging
+
+# Type-Safety
+
+- The "any" type is forbidden for you. You may never use it in plain Typescript or zod-schemas to bypass type checks.
+
+# Codebase
+
+- we use a ddd-inspired with entity sub-directories inside the src/lib directory. these directories always have at least a service.ts and a schemas.ts file.
+- do not write any sql queries outside of service.ts files.
+
+# User-specific Commands
+
+If the user says the following reserved words, please do the following:
+
+- `gc`: a.k.a "git commit", Analyse the latest changes with "git diff" and propose a comprehensive commit message to the user. If they accept, add all, and commit.
+- `gcp`: a.k.a "git commit && git push", same as "gc" but also push the changes to the remote repository.
+- `__analyze__`: If the user puts this command at the beginning or end of their message, this indicates, that they don't want you to edit or create ANY files yet. All they want is you to work in pure read mode, analyzing the situation, proposing solutions, etc. Once they are ready to change files, they will tell you to do so. If a user uses this code, you must acknowledge this at the beginning of your response by saying "--- ANALYSIS MODE (read-only) ---".
+
+# DB Handling
+
+- Never execute any database-altering commands directly; always prompt the user to perform such actions if needed.
+- Never delete or modify existing migration files that have already been committed to the repository.
+- The standard approach for updating the database schema is to modify the Drizzle schema files and have the user apply changes using drizzle-kit. The only exception is when changes are required that cannot be accomplished with Drizzle, such as a CREATE EXTENSION command etc. In this case, run `drizzle-kit generate --custom` to generate a custom migration file, and write the sql commands into the file.
