@@ -1,0 +1,9 @@
+node_modules
+.turbo
+.alchemy
+.env
+
+
+bak/
+repomix-output.*
+.repomixserver.log
